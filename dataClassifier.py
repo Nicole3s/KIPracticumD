@@ -72,13 +72,43 @@ def enhancedFeatureExtractorDigit(datum):
     for this datum (datum is of type samples.Datum).
 
     ## DESCRIBE YOUR ENHANCED FEATURES HERE...
+    1. aantal space horizontaal en verticaal
+    2. aantal nospace horizontaal en verticaal
+    3.
 
     ##
     """
     features =  basicFeatureExtractorDigit(datum)
 
     "*** YOUR CODE HERE ***"
-    util.raiseNotDefined()
+    pixels = datum.getPixels()
+    space = 0
+
+    for x in range(DIGIT_DATUM_WIDTH):
+        for y in range(DIGIT_DATUM_HEIGHT):
+            if datum.getPixel(x, y) == 1:
+                features[(x,y)] = 0
+                continue
+            else:
+
+               for i in (x-1, x, x+ 1):
+                   if i >=0 and i < DIGIT_DATUM_WIDTH:
+                       for j in (y-1,y, y+1):
+                           if j >=0 and j < DIGIT_DATUM_HEIGHT:
+
+                               if datum.getPixel(i,j) != 1:
+                                   space +=1
+
+            if  space == 0:
+                features[(x,y)] = [1,0,0]
+            elif space < 2:
+                features[(x, y)] = [1, 0, 0]
+            elif space < 6:
+                features[(x, y)] = [0, 1, 0]
+            elif space > 5:
+                features[(x, y)] = [0, 0, 1]
+
+    #util.raiseNotDefined()
 
     return features
 
@@ -166,16 +196,16 @@ def analysis(classifier, guesses, testLabels, testData, rawTestData, printImage)
 
     # Put any code here...
     # Example of use:
-    # for i in range(len(guesses)):
-    #     prediction = guesses[i]
-    #     truth = testLabels[i]
-    #     if (prediction != truth):
-    #         print "==================================="
-    #         print "Mistake on example %d" % i
-    #         print "Predicted %d; truth is %d" % (prediction, truth)
-    #         print "Image: "
-    #         print rawTestData[i]
-    #         break
+    for i in range(len(guesses)):
+        prediction = guesses[i]
+        truth = testLabels[i]
+        if (prediction != truth):
+            print "==================================="
+            print "Mistake on example %d" % i
+            print "Predicted %d; truth is %d" % (prediction, truth)
+            print "Image: "
+            print rawTestData[i]
+            break
 
 
 ## =====================
