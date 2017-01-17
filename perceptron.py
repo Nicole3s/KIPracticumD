@@ -86,7 +86,6 @@ class PerceptronClassifier:
         featuresWeights = []
 
         "*** YOUR CODE HERE ***"
-         #sortedKeys() waar die vandaan komt
 
         featuresWeights = self.weights[label].sortedKeys()
         if len(featuresWeights) > 100:
