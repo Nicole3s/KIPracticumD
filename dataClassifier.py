@@ -85,7 +85,7 @@ def enhancedFeatureExtractorDigit(datum):
     space = 0
 
         for x in range(DIGIT_DATUM_WIDTH):
-        for y in range(DIGIT_DATUM_HEIGHT):
+         for y in range(DIGIT_DATUM_HEIGHT):
             #features[(x,y)] = 0
             space = 0
             if datum.getPixel(x, y) == 1:
