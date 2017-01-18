@@ -84,29 +84,33 @@ def enhancedFeatureExtractorDigit(datum):
     pixels = datum.getPixels()
     space = 0
 
-    for x in range(DIGIT_DATUM_WIDTH):
+        for x in range(DIGIT_DATUM_WIDTH):
         for y in range(DIGIT_DATUM_HEIGHT):
+            #features[(x,y)] = 0
+            space = 0
             if datum.getPixel(x, y) == 1:
                 features[(x,y)] = 0
-                continue
+            #    continue
             else:
+                features[(x,y)] = 1
+            for i in (x-1, x, x+ 1):
+               if i >=0 and i < DIGIT_DATUM_WIDTH:
+                   for j in (y-1,y, y+1):
+                       if j >=0 and j < DIGIT_DATUM_HEIGHT:
 
-               for i in (x-1, x, x+ 1):
-                   if i >=0 and i < DIGIT_DATUM_WIDTH:
-                       for j in (y-1,y, y+1):
-                           if j >=0 and j < DIGIT_DATUM_HEIGHT:
-
-                               if datum.getPixel(i,j) != 1:
-                                   space +=1
+                            if datum.getPixel(i,j) != 1 and datum.getPixel(i,j) != 0:
+                               space += 1
+                            elif datum.getPixel(i,j) == 0:
+                               space += 2
 
             if  space == 0:
-                features[(x,y)] = [1,0,0]
-            elif space < 2:
-                features[(x, y)] = [1, 0, 0]
-            elif space < 6:
-                features[(x, y)] = [0, 1, 0]
-            elif space > 5:
-                features[(x, y)] = [0, 0, 1]
+                features[(x,y)] = 0
+            elif space < 10:
+                features[(x, y)] = 0
+            elif space < 15:
+                features[(x, y)] = 0
+            elif space > 14:
+                features[(x, y)] = 1
 
     #util.raiseNotDefined()
 
