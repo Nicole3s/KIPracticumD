@@ -35,6 +35,7 @@ class PerceptronClassifier:
         assert len(weights) == len(self.legalLabels);
         self.weights = weights;
 
+   
     def train( self, trainingData, trainingLabels, validationData, validationLabels ):
         """
         The training loop for the perceptron passes through the training data several
@@ -55,8 +56,8 @@ class PerceptronClassifier:
             print "Starting iteration ", iteration, "..."
             for i in range(len(trainingData)):
                 "*** YOUR CODE HERE ***"
-                labels = self.classify([trainingData[i]]) #y'
-                maxscore = labels[0]
+                labels = self.classify([trainingData[i]])
+                maxscore = labels[0] #y'
                 if maxscore != trainingLabels[i]:
 
                     self.weights[trainingLabels[i]] += trainingData[i]
