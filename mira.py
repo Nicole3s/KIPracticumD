@@ -61,35 +61,39 @@ class MiraClassifier:
         representing a vector of values.
         """
         "*** YOUR CODE HERE ***"
-        #go through every value in C
+               # go through every value in C
         for C in Cgrid:
-        #notate which C values you are using (iteration)
+            # notate which C values you are using (iteration)
             print "Going through Cvalue ", C, " ..."
-        #go through all the values in trainingData
+            # go through all the values in trainingData
             for i in range(len(trainingData)):
-                #sort all the values in the trainingData
-                labels = self.classify([trainingData[i]]) #y'
-                #take the highest value
+                # sort all the values in the trainingData
+                labels = self.classify([trainingData[i]])  # y'
+                # take the highest value
                 maxscore = labels[0]
-                #if the highest value is not equal to the trainingLabel value, continue, else, do nothing
-                print "trainingLabels[i] : ", trainingLabels[i]
-                print "trainingData[i] : ", trainingData[i]
-                 
-                if maxscore != trainingLabels[i]:
+                # if the highest value is not equal to the trainingLabel value, continue, else, do nothing
+                #print "trainingLabels[i] : ", trainingLabels[i]
+               # print "trainingData[i] : ", trainingData[i]
+                #print "test: " ,util.Counter.normalize(trainingData[i])
 
-                    print "self.weights[i] : ", self.weights[i]
-                    print "self.weights[maxscore] : ", self.weights[maxscore]
-                    #calculate step size: stepsize = ((wy' - wy)*f + 1)/2(f norm)^2
-                    stepSize = (((self.weights[maxscore] - self.weights[trainingLabels[i]])*trainingData[i]) + 1)/(2*util.Counter.normalize(trainingData[i])*util.Counter.normalize(trainingData[i]))
-                    #take the minimum of the step size and the C value used
+                if maxscore != trainingLabels[i]:
+                    #print "self.weights[i] : ", self.weights[i]
+                    #print "self.weights[maxscore] : ", self.weights[maxscore]
+                    # calculate step size: stepsize = ((wy' - wy)*f + 1)/2(f norm)^2
+                    stepSize = (((self.weights[maxscore] - self.weights[trainingLabels[i]]) * trainingData[i]) + 1.0) / (
+                    2.0 * (trainingData[i] * trainingData[i]))
+                    # take the minimum of the step size and the C value used
                     stepSizeFinal = min(C, stepSize)
-                    #calculate the value of the weight of y: wy = wy + f*stepsize
-                    self.weights[trainingLabels[i]] += util.Counter.__mul__(trainingData[i], stepSizeFinal) #y
-                    #calculate the value of the weight of y': wy' = wy' - f*stepsize
-                    self.weights[maxscore] -= util.Counter.__mul__(trainingData[i], stepSizeFinal) #y'
-                    
-                    
-        util.raiseNotDefined()
+                    # https://github.com/anthony-niklas/cs188/blob/master/p5/mira.py
+                    copyl = trainingData[i].copy()
+                    copyl.divideAll(1/ stepSizeFinal)
+                    # calculate the value of the weight of y: wy = wy + f*stepsize
+                    self.weights[trainingLabels[i]] += copyl  # y
+                    # calculate the value of the weight of y': wy' = wy' - f*stepsize
+                    self.weights[maxscore] -= copyl # y'
+
+        #util.raiseNotDefined()
+
 
     def classify(self, data ):
         """
