@@ -61,41 +61,50 @@ class MiraClassifier:
         representing a vector of values.
         """
         "*** YOUR CODE HERE ***"
-                #go through every value in C
+        #go through every value in C
         for C in Cgrid:
             #notate which C values you are using (iteration)
             print "Going through Cvalue ", C, " ..."
-            #go through all the values in trainingData
-            for i in range(len(trainingData)):
-                #sort all the values in the trainingData
-                labels = self.classify([trainingData[i]]) #y'
-                #take the highest value
-                maxscore = labels[0]
-                #if the highest value is not equal to the trainingLabel value, continue, else, do nothing
-                
-                if maxscore != trainingLabels[i]:
+            #go through the max number of iterations
+            for n in range(self.max_iterations):
+                #go through all the values in trainingData
+                for i in range(len(trainingData)):
+                    #sort all the values in the trainingData
+                    labels = self.classify([trainingData[i]]) #y'
+                    #take the highest value
+                    maxscore = labels[0]
+
+                    #if the highest value is not equal to the trainingLabel value, continue, else, do nothing
+                    if maxscore != trainingLabels[i]:
+                        
+                        #calculate f norm - square all the vectors in trainingData, add them together, and sqrt the result
+                        #import math in order to use sqrt later
+                        import math
+                        #make a local copy of trainingData[i]
+                        normalizedData = trainingData[i].copy()
+                        #define sum
+                        sum = 0
+                        #loop through all the vectors in the copy of trainingData[i]
+                        for key in normalizedData.keys():
+                            #make a local copy of the vector
+                            vector = normalizedData[key]
+                            #square the vector and add it to sum
+                            sum += vector*vector
+                        #sqrt the result of sum
+                        fnorm = math.sqrt(sum)
                     
-                    #define f normalized
-                    import math
-                    normalizedData = trainingData[i].copy()
-                    sum = 0
-                    for key in normalizedData.keys():
-                        vector = normalizedData[key]
-                        sum += vector*vector
-                    fnorm = math.sqrt(sum)
-                    
-                    #calculate step size: stepsize = ((wy' - wy)*f + 1)/2(f norm)^2
-                    stepSize = (((self.weights[maxscore] - self.weights[trainingLabels[i]])*trainingData[i]) + 1.0)/(2.0*(fnorm*fnorm))
-                    #take the minimum of the step size and the C value used
-                    stepSizeFinal = min(C, stepSize)
-                    # https://github.com/anthony-niklas/cs188/blob/master/p5/mira.py
-                    data = trainingData[i].copy()
-                    #calculate f*stepsize
-                    data.divideAll(1/stepSizeFinal)
-                    # calculate the value of the weight of y: wy = wy + f*stepsize
-                    self.weights[trainingLabels[i]] += data  # y
-                    # calculate the value of the weight of y': wy' = wy' - f*stepsize
-                    self.weights[maxscore] -= data # y'
+                        #calculate step size: stepsize = ((wy' - wy)*f + 1)/2(f norm)^2
+                        stepSize = (((self.weights[maxscore] - self.weights[trainingLabels[i]])*trainingData[i]) + 1.0)/(2.0*(fnorm*fnorm))
+                        #take the minimum of the step size and the C value used
+                        stepSizeFinal = min(C, stepSize)
+                        # https://github.com/anthony-niklas/cs188/blob/master/p5/mira.py
+                        data = trainingData[i].copy()
+                        #calculate f*stepsize
+                        data.divideAll(1/stepSizeFinal)
+                        # calculate the value of the weight of y: wy = wy + f*stepsize
+                        self.weights[trainingLabels[i]] += data  # y
+                        # calculate the value of the weight of y': wy' = wy' - f*stepsize
+                        self.weights[maxscore] -= data # y'
 
     def classify(self, data ):
         """
