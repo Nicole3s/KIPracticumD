@@ -61,11 +61,11 @@ class MiraClassifier:
         representing a vector of values.
         """
         "*** YOUR CODE HERE ***"
-        #go through every value in C
+                #go through every value in C
         for C in Cgrid:
-        #notate which C values you are using (iteration)
+            #notate which C values you are using (iteration)
             print "Going through Cvalue ", C, " ..."
-        #go through all the values in trainingData
+            #go through all the values in trainingData
             for i in range(len(trainingData)):
                 #sort all the values in the trainingData
                 labels = self.classify([trainingData[i]]) #y'
@@ -74,15 +74,18 @@ class MiraClassifier:
                 #if the highest value is not equal to the trainingLabel value, continue, else, do nothing
                 
                 if maxscore != trainingLabels[i]:
-                    print trainingLabels[i]
                     
                     #define f normalized
+                    import math
                     normalizedData = trainingData[i].copy()
-                    if normalizedData != None:
-                        normalizedData = util.Counter.normalize(normalizedData)
-
+                    sum = 0
+                    for key in normalizedData.keys():
+                        vector = normalizedData[key]
+                        sum += vector*vector
+                    fnorm = math.sqrt(sum)
+                    
                     #calculate step size: stepsize = ((wy' - wy)*f + 1)/2(f norm)^2
-                    stepSize = (((self.weights[maxscore] - self.weights[trainingLabels[i]])*trainingData[i]) + 1)/(2*(normalizedData*normalizedData))
+                    stepSize = (((self.weights[maxscore] - self.weights[trainingLabels[i]])*trainingData[i]) + 1.0)/(2.0*(fnorm*fnorm))
                     #take the minimum of the step size and the C value used
                     stepSizeFinal = min(C, stepSize)
                     # https://github.com/anthony-niklas/cs188/blob/master/p5/mira.py
