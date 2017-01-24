@@ -41,7 +41,7 @@ class PerceptronClassifierPacman(PerceptronClassifier):
         return guesses
 
 
-    def train( self, trainingData, trainingLabels, validationData, validationLabels ):
+        def train( self, trainingData, trainingLabels, validationData, validationLabels ):
         self.features = trainingData[0][0]['Stop'].keys() # could be useful later
         # DO NOT ZERO OUT YOUR WEIGHTS BEFORE STARTING TRAINING, OR
         # THE AUTOGRADER WILL LIKELY DEDUCT POINTS.
@@ -50,4 +50,17 @@ class PerceptronClassifierPacman(PerceptronClassifier):
             print "Starting iteration ", iteration, "..."
             for i in range(len(trainingData)):
                 "*** YOUR CODE HERE ***"
-                util.raiseNotDefined()
+                #calculate the score for each action and put it into a list with the highest score at the front
+                labels = self.classify([trainingData[i]])
+                # select the maximum (highest) score from the list.
+                maxscore = labels[0];
+                #check if the predicted score is not equal to the true score (data in the trainingLabels)
+                if maxscore != trainingLabels[i]:
+                    # update the weight vectors for the actual label (for the trainingLabels[i]) and the predicted label
+                    # (maxscore)
+                    # We do (trainingData[i])[0] to select the state of the data.
+                   self.weights += (trainingData[i])[0][trainingLabels[i]]
+                   self.weights -= (trainingData[i])[0][maxscore]
+
+
+                #util.raiseNotDefined()
