@@ -82,37 +82,35 @@ def enhancedFeatureExtractorDigit(datum):
 
     "*** YOUR CODE HERE ***"
     pixels = datum.getPixels()
-    space = 0
 
+    #go through every x value in the datum
     for x in range(DIGIT_DATUM_WIDTH):
-         for y in range(DIGIT_DATUM_HEIGHT):
-            #features[(x,y)] = 0
+        #go through every y value in the datum
+        for y in range(DIGIT_DATUM_HEIGHT):
+            #make a counter
             space = 0
+            #if the pixel we are looking at is black, it given zero weight
             if datum.getPixel(x, y) == 1:
                 features[(x,y)] = 0
-            #    continue
+            #in any other case (that is, both white and grey) it is given relevance
             else:
-                features[(x,y)] = 1
-            for i in (x-1, x, x+ 1):
-               if i >=0 and i < DIGIT_DATUM_WIDTH:
-                   for j in (y-1,y, y+1):
-                       if j >=0 and j < DIGIT_DATUM_HEIGHT:
-
-                            if datum.getPixel(i,j) != 1 and datum.getPixel(i,j) != 0:
-                               space += 1
-                            elif datum.getPixel(i,j) == 0:
-                               space += 2
-
-            if  space == 0:
-                features[(x,y)] = 0
-            elif space < 10:
-                features[(x, y)] = 0
-            elif space < 15:
-                features[(x, y)] = 0
-            elif space > 14:
-                features[(x, y)] = 1
-
-    #util.raiseNotDefined()
+                #go through every pixel around the current pixel
+                for i in (x-1, x, x+ 1):
+                    if i >=0 and i < DIGIT_DATUM_WIDTH:
+                        for j in (y-1,y, y+1):
+                            if j >=0 and j < DIGIT_DATUM_HEIGHT:
+                                #if the pixel is grey it is adds 1 to the counter
+                                if datum.getPixel(i,j) != 1 and datum.getPixel(i,j) != 0:
+                                    space += 1
+                                #if the pixel is white it adds 2 to the counter
+                                elif datum.getPixel(i,j) == 0:
+                                    space += 2
+                
+                #if the counter is above a certain number, the pixel is deemed relevant. Otherwise, it is irrelevant.
+                if space > 14:
+                    features[(x, y)] = 1
+                else:
+                    features[(x, y)] = 0
 
     return features
 
