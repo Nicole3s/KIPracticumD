@@ -97,7 +97,7 @@ class MiraClassifier:
                         stepSize = (((self.weights[maxscore] - self.weights[trainingLabels[i]])*trainingData[i]) + 1.0)/(2.0*(fnorm*fnorm))
                         #take the minimum of the step size and the C value used
                         stepSizeFinal = min(C, stepSize)
-                        # https://github.com/anthony-niklas/cs188/blob/master/p5/mira.py
+                        # https://github.com/anthony-niklas/cs188/blob/master/p5/mira.py: line 100-103 
                         data = trainingData[i].copy()
                         #calculate f*stepsize
                         data.divideAll(1/stepSizeFinal)
